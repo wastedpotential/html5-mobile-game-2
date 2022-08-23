@@ -1,0 +1,2 @@
+- start rewriting html app code
+- performance test app?
