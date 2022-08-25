@@ -35,6 +35,7 @@ module.exports = {
 	mode: 'development',
 	output: {
 		clean: true,
+		path: path.resolve(__dirname, 'www'),
 	},
 	devServer: {
 		static: './www',
