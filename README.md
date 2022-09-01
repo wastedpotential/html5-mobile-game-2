@@ -4,7 +4,7 @@
 
 Another attempt at publishing an html5 app to mobile. This version uses cordova (PhoneGap).
 
-AS of 8-23-2022, I've packaged my swaparooni html5 canvas app with cordova. All of the Swaparooni source files are included here. To run the app on Android:
+AS of 8-31-2022, I've packaged a basic PIXI JS html5 canvas app with cordova. All of the source files are included here. To run the app on Android:
 
 -   `npm i` (install dependencies)
 -   `npm run production` (package all html, js, etc and publish to www/ folder)
