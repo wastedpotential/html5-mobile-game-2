@@ -19,7 +19,11 @@ export class Mole extends PIXI.Container {
 		this.deadSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['dead']);
 
 		this.currentAnim = null;
+		this.showSprite.animationSpeed = this.SPEED;
 		this.stillSprite.animationSpeed = this.SPEED;
+		this.blinkSprite.animationSpeed = this.SPEED;
+		this.pressSprite.animationSpeed = this.SPEED;
+		this.deadSprite.animationSpeed = this.SPEED;
 		this.startAnimation(this.Animations.STILL);
 
 		// const texButton = textureSheet.textures['menubar_site_btn.png'];
@@ -48,6 +52,7 @@ export class Mole extends PIXI.Container {
 		if (this.currentAnim == nextAnim) return;
 
 		this.removeChild(this.stillSprite);
+		this.removeChild(this.blinkSprite);
 
 		switch (nextAnim) {
 			case this.Animations.SHOW:
@@ -59,7 +64,12 @@ export class Mole extends PIXI.Container {
 				break;
 			case this.Animations.BLINK:
 				this.addChild(this.blinkSprite);
-				this.blinkSprite.play();
+				this.blinkSprite.onComplete = () => {
+					console.log('done');
+					this.startAnimation(this.Animations.STILL);
+				};
+				this.blinkSprite.loop = false;
+				this.blinkSprite.gotoAndPlay(0);
 				break;
 			case this.Animations.PRESS:
 				break;
