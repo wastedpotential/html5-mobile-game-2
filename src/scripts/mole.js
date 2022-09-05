@@ -33,7 +33,8 @@ export class Mole extends PIXI.Container {
 		this.interactive = true;
 		this.buttonMode = true;
 		this.defaultCursor = 'pointer';
-		this.on('mouseup', this.onButtonUp).on('mouseupoutside', this.onButtonUp).on('touchend', this.onButtonUp).on('touchendoutside', this.onButtonUp);
+		this.on('mousedown', this.onPressDown).on('touchstart', this.onPressDown);
+		this.on('mouseup', this.onPressUp).on('mouseupoutside', this.onPressUp).on('touchend', this.onPressUp).on('touchendoutside', this.onPressUp);
 		// this.resize(width);
 	}
 
@@ -48,19 +49,31 @@ export class Mole extends PIXI.Container {
 		// }
 	}
 
+	show() {}
+
+	hide() {}
+
 	startAnimation(nextAnim) {
 		if (this.currentAnim == nextAnim) return;
 
+		clearTimeout(this.blinkTimeout);
+
+		this.removeChild(this.showSprite);
 		this.removeChild(this.stillSprite);
 		this.removeChild(this.blinkSprite);
+		this.removeChild(this.pressSprite);
+		this.removeChild(this.deadSprite);
 
 		switch (nextAnim) {
 			case this.Animations.SHOW:
 				break;
 			case this.Animations.STILL:
-				console.log('==', this.stillSprite);
 				this.addChild(this.stillSprite);
 				this.stillSprite.play();
+				const blinkTime = 800 + Math.floor(2000 * Math.random());
+				this.blinkTimeout = setTimeout(() => {
+					this.startAnimation(this.Animations.BLINK);
+				}, blinkTime);
 				break;
 			case this.Animations.BLINK:
 				this.addChild(this.blinkSprite);
@@ -72,14 +85,24 @@ export class Mole extends PIXI.Container {
 				this.blinkSprite.gotoAndPlay(0);
 				break;
 			case this.Animations.PRESS:
+				this.addChild(this.pressSprite);
+				this.pressSprite.play();
 				break;
 			case this.Animations.DEAD:
+				this.addChild(this.deadSprite);
+				this.deadSprite.play();
 				break;
 		}
 		this.currentAnim = nextAnim;
 	}
 
-	onButtonUp() {
-		this.startAnimation(this.Animations.BLINK);
+	onPressDown() {
+		if (this.currentAnim == this.Animations.STILL || this.currentAnim == this.Animations.BLINK) {
+			this.startAnimation(this.Animations.PRESS);
+		}
+	}
+
+	onPressUp() {
+		this.startAnimation(this.Animations.DEAD);
 	}
 }
