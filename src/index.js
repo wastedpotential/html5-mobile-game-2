@@ -5,9 +5,13 @@ import * as PIXI from './scripts/pixi.js';
 let sheet, loader, centerPoint;
 
 function createMole() {
-	let mole = new Mole(sheet);
-	mole.position.set(0, 0);
-	centerPoint.addChild(mole);
+	let mole1 = new Mole(sheet);
+	mole1.position.set(-200, 0);
+	centerPoint.addChild(mole1);
+
+	let mole2 = new Mole(sheet);
+	mole2.position.set(200, 0);
+	centerPoint.addChild(mole2);
 }
 
 function onAppProgress(e) {

@@ -69,7 +69,8 @@ export class Mole extends PIXI.Container {
 				break;
 			case this.Animations.STILL:
 				this.addChild(this.stillSprite);
-				this.stillSprite.play();
+				const startFrame = Math.ceil(8 * Math.random());
+				this.stillSprite.gotoAndPlay(startFrame);
 				const blinkTime = 800 + Math.floor(2000 * Math.random());
 				this.blinkTimeout = setTimeout(() => {
 					this.startAnimation(this.Animations.BLINK);
@@ -78,8 +79,9 @@ export class Mole extends PIXI.Container {
 			case this.Animations.BLINK:
 				this.addChild(this.blinkSprite);
 				this.blinkSprite.onComplete = () => {
-					console.log('done');
-					this.startAnimation(this.Animations.STILL);
+					if (this.currentAnim == this.Animations.BLINK) {
+						this.startAnimation(this.Animations.STILL);
+					}
 				};
 				this.blinkSprite.loop = false;
 				this.blinkSprite.gotoAndPlay(0);
@@ -90,7 +92,8 @@ export class Mole extends PIXI.Container {
 				break;
 			case this.Animations.DEAD:
 				this.addChild(this.deadSprite);
-				this.deadSprite.play();
+				const sFrame = Math.ceil(8 * Math.random());
+				this.deadSprite.gotoAndPlay(sFrame);
 				break;
 		}
 		this.currentAnim = nextAnim;
