@@ -137,11 +137,13 @@
 	"sourceSize": {"w":240,"h":188}
 }},
 "animations": {
+	"none": ["none.png", "none.png"],
 	"blink": ["blink_01.png","blink_02.png","blink_03.png"],
 	"dead": ["dead_01.png","dead_02.png","dead_03.png","dead_04.png","dead_02.png","dead_01.png","dead_04.png","dead_03.png"],
 	"press": ["press_01.png","press_02.png"],
 	"show": ["show_01.png","show_02.png","show_03.png"],
-	"still": ["still_01.png","still_02.png","still_03.png","still_04.png","still_02.png","still_01.png","still_04.png","still_03.png"]
+	"still": ["still_01.png","still_02.png","still_03.png","still_04.png","still_02.png","still_01.png","still_04.png","still_03.png"],
+	"hide": ["show_01.png"]
 },
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",

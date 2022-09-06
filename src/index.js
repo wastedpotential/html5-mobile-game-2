@@ -2,16 +2,36 @@ import { Mole } from './scripts/mole.js';
 import { spritesheetLocation } from './scripts/assets.js';
 import * as PIXI from './scripts/pixi.js';
 
-let sheet, loader, centerPoint;
+let sheet, loader, centerPoint, showTimer, hideTimer, mole1, mole2;
 
-function createMole() {
-	let mole1 = new Mole(sheet);
+function createMoles() {
+	mole1 = new Mole(sheet);
 	mole1.position.set(-200, 0);
 	centerPoint.addChild(mole1);
 
-	let mole2 = new Mole(sheet);
+	mole2 = new Mole(sheet);
 	mole2.position.set(200, 0);
 	centerPoint.addChild(mole2);
+}
+
+function showMoles() {
+	clearTimeout(showTimer);
+	console.log('herp');
+	mole1.show();
+	mole2.show();
+	console.log('derp');
+	hideTimer = setTimeout(() => {
+		hideMoles();
+	}, 1500);
+}
+
+function hideMoles() {
+	clearTimeout(hideTimer);
+	mole1.hide();
+	mole2.hide();
+	showTimer = setTimeout(() => {
+		showMoles();
+	}, 2000);
 }
 
 function onAppProgress(e) {
@@ -26,7 +46,10 @@ function onAppError(e) {
 
 function onAppLoaded(e) {
 	sheet = loader.resources[spritesheetLocation];
-	createMole();
+	createMoles();
+	showTimer = setTimeout(() => {
+		showMoles();
+	}, 2000);
 	onResize();
 }
 
