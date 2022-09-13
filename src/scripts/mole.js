@@ -4,33 +4,24 @@ export class Mole extends PIXI.Container {
 	constructor(textureSheet) {
 		super();
 		this.SPEED = 0.25;
-		this.Animations = {
-			NONE: 'none',
-			SHOW: 'show',
-			STILL: 'still',
-			BLINK: 'blink',
-			PRESS: 'press',
-			DEAD: 'dead',
-			HIDE: 'hide',
+		this.animations = {
+			none: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['none']),
+			show: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['show']),
+			still: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']),
+			blink: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['blink']),
+			press: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['press']),
+			dead: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['dead']),
+			hide: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['hide']),
 		};
 
-		this.noneSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['none']);
-		this.showSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['show']);
-		this.stillSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']);
-		this.blinkSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['blink']);
-		this.pressSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['press']);
-		this.deadSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['dead']);
-		this.hideSprite = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['hide']);
-
 		this.currentAnim = null;
-		this.noneSprite.animationSpeed = this.SPEED;
-		this.showSprite.animationSpeed = this.SPEED;
-		this.stillSprite.animationSpeed = this.SPEED;
-		this.blinkSprite.animationSpeed = this.SPEED;
-		this.pressSprite.animationSpeed = this.SPEED;
-		this.deadSprite.animationSpeed = this.SPEED;
-		this.hideSprite.animationSpeed = this.SPEED;
-		this.startAnimation(this.Animations.NONE);
+
+		for (var prop in this.animations) {
+			if (!this.animations.hasOwnProperty(prop)) continue; // skip prototype properties
+			// prop.animationSpeed = this.SPEED;
+			console.log(typeof prop);
+		}
+		this.startAnimation(this.animations.none);
 
 		// const texButton = textureSheet.textures['menubar_site_btn.png'];
 		// this.siteButton = new PIXI.Sprite(texButton);
@@ -56,11 +47,11 @@ export class Mole extends PIXI.Container {
 	}
 
 	show() {
-		this.startAnimation(this.Animations.SHOW);
+		this.startAnimation(this.animations.show);
 	}
 
 	hide() {
-		this.startAnimation(this.Animations.HIDE);
+		this.startAnimation(this.animations.hide);
 	}
 
 	startAnimation(nextAnim) {
@@ -68,80 +59,68 @@ export class Mole extends PIXI.Container {
 
 		clearTimeout(this.blinkTimeout);
 
-		this.removeChild(this.noneSprite);
-		this.removeChild(this.showSprite);
-		this.removeChild(this.stillSprite);
-		this.removeChild(this.blinkSprite);
-		this.removeChild(this.pressSprite);
-		this.removeChild(this.deadSprite);
-		this.removeChild(this.hideSprite);
+		this.removeChild(this.currentAnim);
 
+		this.addChild(nextAnim);
 		switch (nextAnim) {
-			case this.Animations.NONE:
-				this.addChild(this.noneSprite);
-				this.noneSprite.play();
+			case this.animations.none:
+				nextAnim.play();
 				break;
-			case this.Animations.SHOW:
-				this.addChild(this.showSprite);
-				this.showSprite.onComplete = () => {
-					if (this.currentAnim == this.Animations.SHOW) {
-						this.startAnimation(this.Animations.STILL);
+			case this.animations.show:
+				nextAnim.onComplete = () => {
+					if (this.currentAnim == this.animations.show) {
+						this.startAnimation(this.animations.still);
 					}
 				};
-				this.showSprite.loop = false;
-				this.showSprite.gotoAndPlay(0);
+				nextAnim.loop = false;
+				nextAnim.gotoAndPlay(0);
 				break;
-			case this.Animations.STILL:
-				this.addChild(this.stillSprite);
+			case this.animations.still:
 				const startFrame = Math.ceil(8 * Math.random());
-				this.stillSprite.gotoAndPlay(startFrame);
+				nextAnim.gotoAndPlay(startFrame);
 				const blinkTime = 800 + Math.floor(2000 * Math.random());
 				this.blinkTimeout = setTimeout(() => {
-					this.startAnimation(this.Animations.BLINK);
+					this.startAnimation(this.animations.blink);
 				}, blinkTime);
 				break;
-			case this.Animations.BLINK:
-				this.addChild(this.blinkSprite);
-				this.blinkSprite.onComplete = () => {
-					if (this.currentAnim == this.Animations.BLINK) {
-						this.startAnimation(this.Animations.STILL);
+			case this.animations.blink:
+				nextAnim.onComplete = () => {
+					if (this.currentAnim == this.animations.blink) {
+						this.startAnimation(this.animations.still);
 					}
 				};
-				this.blinkSprite.loop = false;
-				this.blinkSprite.gotoAndPlay(0);
+				nextAnim.loop = false;
+				nextAnim.gotoAndPlay(0);
 				break;
-			case this.Animations.PRESS:
-				this.addChild(this.pressSprite);
-				this.pressSprite.play();
+			case this.animations.press:
+				nextAnim.play();
 				break;
-			case this.Animations.DEAD:
-				this.addChild(this.deadSprite);
+			case this.animations.dead:
 				const sFrame = Math.ceil(8 * Math.random());
-				this.deadSprite.gotoAndPlay(sFrame);
+				nextAnim.gotoAndPlay(sFrame);
 				break;
-			case this.Animations.HIDE:
-				this.addChild(this.hideSprite);
-				this.hideSprite.onComplete = () => {
-					if (this.currentAnim == this.Animations.HIDE) {
-						this.startAnimation(this.Animations.NONE);
+			case this.animations.hide:
+				nextAnim.onComplete = () => {
+					if (this.currentAnim == this.animations.hide) {
+						this.startAnimation(this.animations.none);
 					}
 				};
-				this.hideSprite.loop = false;
-				this.hideSprite.gotoAndPlay(0);
+				nextAnim.loop = false;
+				nextAnim.gotoAndPlay(0);
 				break;
 		}
 		this.currentAnim = nextAnim;
 	}
 
 	onPressDown() {
-		if (this.currentAnim == this.Animations.STILL || this.currentAnim == this.Animations.BLINK) {
-			this.startAnimation(this.Animations.PRESS);
+		if (this.currentAnim == this.animations.still || this.currentAnim == this.animations.blink) {
+			this.startAnimation(this.animations.press);
 		}
 	}
 
 	onPressUp() {
-		if (this.currentAnim == this.Animations.PRESS) {
-			this.startAnimation(this.Animations.DEAD);
+		if (this.currentAnim == this.animations.press) {
+			this.startAnimation(this.animations.dead);
 		}
 	}
 }
