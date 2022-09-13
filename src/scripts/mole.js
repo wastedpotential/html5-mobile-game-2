@@ -16,10 +16,9 @@ export class Mole extends PIXI.Container {
 
 		this.currentAnim = null;
 
-		for (var prop in this.animations) {
-			if (!this.animations.hasOwnProperty(prop)) continue; // skip prototype properties
-			// prop.animationSpeed = this.SPEED;
-			console.log(typeof prop);
+		for (var key in this.animations) {
+			if (!this.animations.hasOwnProperty(key)) continue; // skip prototype properties
+			this.animations[key].animationSpeed = this.SPEED;
 		}
 		this.startAnimation(this.animations.none);
 
