@@ -3,7 +3,6 @@ import * as PIXI from './pixi.js';
 export class Mole extends PIXI.Container {
 	constructor(textureSheet) {
 		super();
-		this.SPEED = 0.25;
 		this.animations = {
 			none: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['none']),
 			show: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['show']),
@@ -16,9 +15,10 @@ export class Mole extends PIXI.Container {
 
 		this.currentAnim = null;
 
+		// set all animations to same speed:
 		for (var key in this.animations) {
 			if (!this.animations.hasOwnProperty(key)) continue; // skip prototype properties
-			this.animations[key].animationSpeed = this.SPEED;
+			this.animations[key].animationSpeed = 0.25;
 		}
 		this.startAnimation(this.animations.none);
 
@@ -26,6 +26,8 @@ export class Mole extends PIXI.Container {
 		// this.siteButton = new PIXI.Sprite(texButton);
 		// this.addChild(this.siteButton);
 		// this.siteButton.anchor.set(1, 0);
+
+		// TODO: narrow the hit area to not just be anywhere on the sprite:
 		this.interactive = true;
 		this.buttonMode = true;
 		this.defaultCursor = 'pointer';
