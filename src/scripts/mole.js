@@ -79,7 +79,7 @@ export class Mole extends PIXI.Container {
 			case this.animations.still:
 				const startFrame = Math.ceil(8 * Math.random());
 				nextAnim.gotoAndPlay(startFrame);
-				const blinkTime = 800 + Math.floor(2000 * Math.random());
+				const blinkTime = 400 + Math.floor(1000 * Math.random());
 				this.blinkTimeout = setTimeout(() => {
 					this.startAnimation(this.animations.blink);
 				}, blinkTime);

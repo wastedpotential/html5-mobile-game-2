@@ -1,25 +1,31 @@
 import { Mole } from './scripts/mole.js';
-import { spritesheetLocation } from './scripts/assets.js';
 import * as PIXI from './scripts/pixi.js';
+import * as data from './scripts/data.js';
 
-let sheet, loader, centerPoint, showTimer, hideTimer, mole1, mole2;
+let sheet, loader, centerPoint, showTimer, hideTimer;
+const moles = [];
 
 function createMoles() {
-	mole1 = new Mole(sheet);
-	mole1.position.set(-200, 0);
-	centerPoint.addChild(mole1);
-
-	mole2 = new Mole(sheet);
-	mole2.position.set(200, 0);
-	centerPoint.addChild(mole2);
+	const moleRows = data.molesPerRow;
+	const numRows = moleRows.length;
+	for (let i = 0; i < numRows; i++) {
+		const numMolesInRow = moleRows[i];
+		const y = data.verticalSpacing * (i + 0.5 * (1 - numRows));
+		for (let j = 0; j < numMolesInRow; j++) {
+			const x = data.horizontalSpacing * (j + 0.5 * (1 - numMolesInRow));
+			const mole = new Mole(sheet);
+			mole.position.set(x, y);
+			centerPoint.addChild(mole);
+			moles.push(mole);
+		}
+	}
 }
 
 function showMoles() {
 	clearTimeout(showTimer);
-	console.log('herp');
-	mole1.show();
-	mole2.show();
-	console.log('derp');
+	for (let i = 0; i < moles.length; i++) {
+		moles[i].show();
+	}
 	hideTimer = setTimeout(() => {
 		hideMoles();
 	}, 1500);
@@ -27,8 +33,9 @@ function showMoles() {
 
 function hideMoles() {
 	clearTimeout(hideTimer);
-	mole1.hide();
-	mole2.hide();
+	for (let i = 0; i < moles.length; i++) {
+		moles[i].hide();
+	}
 	showTimer = setTimeout(() => {
 		showMoles();
 	}, 2000);
@@ -45,7 +52,7 @@ function onAppError(e) {
 }
 
 function onAppLoaded(e) {
-	sheet = loader.resources[spritesheetLocation];
+	sheet = loader.resources[data.spritesheetLocation];
 	createMoles();
 	showTimer = setTimeout(() => {
 		showMoles();
@@ -73,7 +80,7 @@ preload(); // assets are added and displayed in onComplete()
 
 function preload() {
 	loader = PIXI.Loader.shared; // PixiJS exposes a premade instance for you to use.
-	loader.add(spritesheetLocation);
+	loader.add(data.spritesheetLocation);
 	loader.onProgress.add(onAppProgress);
 	loader.onError.add(onAppError);
 	loader.onComplete.add(onAppLoaded);
