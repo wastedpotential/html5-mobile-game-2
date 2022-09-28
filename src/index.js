@@ -98,9 +98,10 @@ function onResize() {
 
 	if (centerPoint) {
 		centerPoint.position.set(halfW, halfH);
-	}
 
-	// hacky way using constant from assets.js to keep anagram scaled to fit on screen
-	// const scale = Math.min(1, w / minStageWidth);
-	// centerPoint.scale.set(scale, scale);
+		const gameW = centerPoint.width + 2 * data.minGameMargin;
+		const gameH = centerPoint.height + 2 * data.minGameMargin;
+		const scale = Math.min(w / gameW, h / gameH);
+		centerPoint.scale.set(scale, scale);
+	}
 }

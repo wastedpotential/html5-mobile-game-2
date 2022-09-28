@@ -1,6 +1,8 @@
 import * as PIXI from './pixi.js';
 
 export class Mole extends PIXI.Container {
+	// ============== PUBLIC METHODS ==============
+
 	constructor(textureSheet) {
 		super();
 		this.animations = {
@@ -15,28 +17,38 @@ export class Mole extends PIXI.Container {
 
 		this.currentAnim = null;
 
-		// set all animations to same speed:
+		// set properties on all animations:
 		for (var key in this.animations) {
 			if (!this.animations.hasOwnProperty(key)) continue; // skip prototype properties
 			this.animations[key].animationSpeed = 0.25;
+			this.animations[key].anchor.set(0.5, 0.5);
 		}
-		this.startAnimation(this.animations.none);
+		this.#startAnimation(this.animations.none);
 
 		// const texButton = textureSheet.textures['menubar_site_btn.png'];
 		// this.siteButton = new PIXI.Sprite(texButton);
 		// this.addChild(this.siteButton);
-		// this.siteButton.anchor.set(1, 0);
 
 		// TODO: narrow the hit area to not just be anywhere on the sprite:
 		this.interactive = true;
 		this.buttonMode = true;
 		this.defaultCursor = 'pointer';
-		this.on('mousedown', this.onPressDown).on('touchstart', this.onPressDown);
-		this.on('mouseup', this.onPressUp).on('mouseupoutside', this.onPressUp).on('touchend', this.onPressUp).on('touchendoutside', this.onPressUp);
-		// this.resize(width);
+		this.on('mousedown', this.#onPressDown).on('touchstart', this.#onPressDown);
+		this.on('mouseup', this.#onPressUp).on('mouseupoutside', this.#onPressUp).on('touchend', this.#onPressUp).on('touchendoutside', this.#onPressUp);
+		// this.#resize(width);
 	}
 
-	resize(width) {
+	show() {
+		this.#startAnimation(this.animations.show);
+	}
+
+	hide() {
+		this.#startAnimation(this.animations.hide);
+	}
+
+	// ============== PRIVATE METHODS ==============
+
+	#resize(width) {
 		// const half = Math.ceil(width / 2);
 		// if (this.bg) {
 		// 	this.bg.width = width + 10;
@@ -47,15 +59,7 @@ export class Mole extends PIXI.Container {
 		// }
 	}
 
-	show() {
-		this.startAnimation(this.animations.show);
-	}
-
-	hide() {
-		this.startAnimation(this.animations.hide);
-	}
-
-	startAnimation(nextAnim) {
+	#startAnimation(nextAnim) {
 		if (this.currentAnim == nextAnim) return;
 
 		clearTimeout(this.blinkTimeout);
@@ -70,7 +74,7 @@ export class Mole extends PIXI.Container {
 			case this.animations.show:
 				nextAnim.onComplete = () => {
 					if (this.currentAnim == this.animations.show) {
-						this.startAnimation(this.animations.still);
+						this.#startAnimation(this.animations.still);
 					}
 				};
 				nextAnim.loop = false;
@@ -81,13 +85,13 @@ export class Mole extends PIXI.Container {
 				nextAnim.gotoAndPlay(startFrame);
 				const blinkTime = 400 + Math.floor(1000 * Math.random());
 				this.blinkTimeout = setTimeout(() => {
-					this.startAnimation(this.animations.blink);
+					this.#startAnimation(this.animations.blink);
 				}, blinkTime);
 				break;
 			case this.animations.blink:
 				nextAnim.onComplete = () => {
 					if (this.currentAnim == this.animations.blink) {
-						this.startAnimation(this.animations.still);
+						this.#startAnimation(this.animations.still);
 					}
 				};
 				nextAnim.loop = false;
@@ -103,7 +107,7 @@ export class Mole extends PIXI.Container {
 			case this.animations.hide:
 				nextAnim.onComplete = () => {
 					if (this.currentAnim == this.animations.hide) {
-						this.startAnimation(this.animations.none);
+						this.#startAnimation(this.animations.none);
 					}
 				};
 				nextAnim.loop = false;
@@ -113,15 +117,15 @@ export class Mole extends PIXI.Container {
 		this.currentAnim = nextAnim;
 	}
 
-	onPressDown() {
+	#onPressDown() {
 		if (this.currentAnim == this.animations.still || this.currentAnim == this.animations.blink) {
-			this.startAnimation(this.animations.press);
+			this.#startAnimation(this.animations.press);
 		}
 	}
 
-	onPressUp() {
+	#onPressUp() {
 		if (this.currentAnim == this.animations.press) {
-			this.startAnimation(this.animations.dead);
+			this.#startAnimation(this.animations.dead);
 		}
 	}
 }
