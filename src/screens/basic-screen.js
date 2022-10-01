@@ -2,24 +2,19 @@
 import * as PIXI from '../scripts/pixi.js';
 
 export class BasicScreen {
-	renderer = new PIXI.Container(); // public for subclass access
+	view = new PIXI.Container(); // wrapper view public for subclass access
 
-	// ============== PUBLIC METHODS ==============
 	constructor() {
 		console.log('constructor');
 	}
 
-	show(onShow) {
-		console.log('show', onShow);
-		() => {
-			onShow();
-		};
+	show(onComplete) {
+		console.log('show', onComplete);
+		onComplete();
 	}
 
-	hide(onHide) {
+	hide(onComplete) {
 		console.log('hide');
-		() => {
-			onHide();
-		};
+		onComplete();
 	}
 }

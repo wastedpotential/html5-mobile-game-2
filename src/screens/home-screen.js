@@ -17,8 +17,8 @@ export class HomeScreen extends BasicScreen {
 		herp.buttonMode = true;
 		herp.defaultCursor = 'pointer';
 		herp.on('mouseup', this.#onPressUp).on('mouseupoutside', this.#onPressUp).on('touchend', this.#onPressUp).on('touchendoutside', this.#onPressUp);
-		this.renderer.addChild(herp);
-		// const game = new Game(this.renderer);
+		this.view.addChild(herp);
+		// const game = new Game(this.view);
 	}
 
 	#onPressUp() {

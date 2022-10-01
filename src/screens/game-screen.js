@@ -9,6 +9,6 @@ export class GameScreen extends BasicScreen {
 	constructor() {
 		super();
 		console.log('game screen');
-		const game = new Game(this.renderer);
+		const game = new Game(this.view);
 	}
 }

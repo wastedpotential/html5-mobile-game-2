@@ -1,5 +1,4 @@
 import * as PIXI from './scripts/pixi.js';
-import { Game } from './scripts/game.js';
 import { HomeScreen } from './screens/home-screen';
 import { Navigator } from './navigation';
 import { appState } from './scripts/state';
@@ -32,8 +31,7 @@ function onAppLoaded(e) {
 	appState.navigator.navigateTo(homeScreen);
 }
 
-function preload() {
-	loader = PIXI.Loader.shared; // PixiJS exposes a premade instance for you to use.
+function preload(loader) {
 	loader.add(data.spritesheetLocation);
 	loader.onProgress.add(onAppProgress);
 	loader.onError.add(onAppError);
@@ -52,7 +50,6 @@ function onResize() {
 }
 
 const app = initApp();
-let loader = null;
-preload();
-console.log('app:', app);
+const loader = PIXI.Loader.shared; // PixiJS exposes a premade instance for you to use.
+preload(loader);
 appState.navigator = new Navigator(app);

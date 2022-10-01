@@ -12,9 +12,9 @@ export class Game {
 	moles = [];
 	parentView = null;
 
-	constructor(renderer) {
+	constructor(view) {
 		console.log('game!');
-		this.parentView = renderer;
+		this.parentView = view;
 		this.parentView.addChild(this.centerPoint);
 		this.start();
 	}
@@ -68,11 +68,8 @@ export class Game {
 	onResize() {
 		const w = window.innerWidth;
 		const h = window.innerHeight;
-		const halfW = Math.ceil(w / 2);
-		const halfH = Math.ceil(h / 2);
 
 		if (this.centerPoint) {
-			this.centerPoint.position.set(halfW, halfH);
 			const gameW = this.centerPoint.width + 2 * data.minGameMargin;
 			const gameH = this.centerPoint.height + 2 * data.minGameMargin;
 			const scale = Math.min(w / gameW, h / gameH);

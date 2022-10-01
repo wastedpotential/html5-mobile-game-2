@@ -1,11 +1,17 @@
+import * as PIXI from '../scripts/pixi.js';
+
 export class Navigator {
 	#app;
 	#currentScreen;
 	#nextScreen;
 	#isNavigating = false;
+	#appView = new PIXI.Container();
 
 	constructor(app) {
 		this.#app = app;
+		this.#app.stage.addChild(this.#appView);
+		window.addEventListener('resize', this.onResize);
+		this.onResize();
 	}
 
 	navigateTo(screen) {
@@ -16,9 +22,16 @@ export class Navigator {
 		this.#nextScreen = screen;
 		if (this.#currentScreen) {
 			console.log('removing...');
-			this.#app.stage.removeChild(this.#currentScreen.renderer);
-			// this.#currentScreen.hide(this.showNextScreen);
+			this.#currentScreen.hide(this.onHideComplete.bind(this));
+		} else {
+			this.showNextScreen();
 		}
+	}
+
+	onHideComplete() {
+		console.log('onhidecomplete');
+		this.#appView.removeChild(this.#currentScreen.view);
+		this.#currentScreen = null;
 		this.showNextScreen();
 	}
 
@@ -26,15 +39,25 @@ export class Navigator {
 		console.log('show next...');
 		this.#currentScreen = this.#nextScreen;
 		this.#nextScreen = null;
-		this.#app.stage.addChild(this.#currentScreen.renderer);
-		console.log('~~~', this.onShow);
-		this.#currentScreen.show(this.onShow);
+		this.#appView.addChild(this.#currentScreen.view);
+		this.#currentScreen.show(this.onShowComplete.bind(this));
 		this.#isNavigating = false;
 	}
 
-	onShow() {
+	onShowComplete() {
 		console.log('~~~~~');
 		console.log('##', this, this.#isNavigating);
 		this.#isNavigating = false;
+	}
+
+	onResize() {
+		const w = window.innerWidth;
+		const h = window.innerHeight;
+		const halfW = Math.ceil(w / 2);
+		const halfH = Math.ceil(h / 2);
+
+		if (this.#appView) {
+			this.#appView.position.set(halfW, halfH);
+		}
 	}
 }
