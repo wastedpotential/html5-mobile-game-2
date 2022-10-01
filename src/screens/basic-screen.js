@@ -1,16 +1,25 @@
 // interface for screens
+import * as PIXI from '../scripts/pixi.js';
 
 export class BasicScreen {
+	renderer = new PIXI.Container(); // public for subclass access
+
 	// ============== PUBLIC METHODS ==============
 	constructor() {
 		console.log('constructor');
 	}
 
-	show() {
-		console.log('herp');
+	show(onShow) {
+		console.log('show', onShow);
+		() => {
+			onShow();
+		};
 	}
 
-	hide() {
-		console.log('derp');
+	hide(onHide) {
+		console.log('hide');
+		() => {
+			onHide();
+		};
 	}
 }
