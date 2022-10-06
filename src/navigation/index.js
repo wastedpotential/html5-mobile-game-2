@@ -10,7 +10,7 @@ export class Navigator {
 	constructor(app) {
 		this.#app = app;
 		this.#app.stage.addChild(this.#appView);
-		window.addEventListener('resize', this.onResize);
+		// window.addEventListener('resize', this.onResize); // TODO - this no worky
 		this.onResize();
 	}
 
@@ -19,13 +19,11 @@ export class Navigator {
 			throw 'navigateTo() parameter must be a subclass of BasicScreen';
 		}
 
-		console.log(screen, this.#currentScreen, this.#isNavigating);
 		if (screen == this.#currentScreen) return;
 		if (this.#isNavigating) return;
 		this.#isNavigating = true;
 		this.#nextScreen = screen;
 		if (this.#currentScreen) {
-			console.log('removing...');
 			this.#currentScreen.hide(this.onHideComplete.bind(this));
 		} else {
 			this.showNextScreen();
@@ -33,14 +31,12 @@ export class Navigator {
 	}
 
 	onHideComplete() {
-		console.log('onhidecomplete');
 		this.#appView.removeChild(this.#currentScreen.view);
-		this.#currentScreen = null;
+		this.#currentScreen = null; // TODO: will the screen be garbage collected?
 		this.showNextScreen();
 	}
 
 	showNextScreen() {
-		console.log('show next...');
 		this.#currentScreen = this.#nextScreen;
 		this.#nextScreen = null;
 		this.#appView.addChild(this.#currentScreen.view);
@@ -49,16 +45,12 @@ export class Navigator {
 	}
 
 	onShowComplete() {
-		console.log('~~~~~');
-		console.log('##', this, this.#isNavigating);
 		this.#isNavigating = false;
 	}
 
 	onResize() {
-		const w = window.innerWidth;
-		const h = window.innerHeight;
-		const halfW = Math.ceil(w / 2);
-		const halfH = Math.ceil(h / 2);
+		const halfW = Math.ceil(window.innerWidth / 2);
+		const halfH = Math.ceil(window.innerHeight / 2);
 
 		if (this.#appView) {
 			this.#appView.position.set(halfW, halfH);

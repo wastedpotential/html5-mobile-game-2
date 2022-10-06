@@ -7,12 +7,10 @@ export class BasicScreen {
 	filter = new PIXI.filters.AlphaFilter(0);
 
 	constructor() {
-		console.log('constructor');
 		this.view.filters = [this.filter];
 	}
 
 	show(onComplete) {
-		console.log('show', onComplete);
 		gsap.to(this.filter, {
 			alpha: 1,
 			delay: 0,
@@ -24,7 +22,6 @@ export class BasicScreen {
 	}
 
 	hide(onComplete) {
-		console.log('hide');
 		gsap.to(this.filter, {
 			alpha: 0,
 			delay: 0,

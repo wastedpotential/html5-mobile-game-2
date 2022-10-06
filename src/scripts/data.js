@@ -1,3 +1,6 @@
+// pixi constants:
+export const animationSpeed = 0.25;
+
 // game setup:
 export const molesPerRow = [3, 2];
 export const horizontalSpacing = 350;

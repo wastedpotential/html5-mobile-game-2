@@ -1,4 +1,5 @@
 import * as PIXI from './pixi.js';
+import * as data from './data.js';
 
 export class Mole extends PIXI.Container {
 	// ============== PUBLIC METHODS ==============
@@ -20,7 +21,7 @@ export class Mole extends PIXI.Container {
 		// set properties on all animations:
 		for (var key in this.animations) {
 			if (!this.animations.hasOwnProperty(key)) continue; // skip prototype properties
-			this.animations[key].animationSpeed = 0.25;
+			this.animations[key].animationSpeed = data.animationSpeed;
 			this.animations[key].anchor.set(0.5, 0.5);
 		}
 		this.#startAnimation(this.animations.none);

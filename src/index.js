@@ -50,6 +50,7 @@ function onResize() {
 }
 
 const app = initApp();
-const loader = PIXI.Loader.shared; // PixiJS exposes a premade instance for you to use.
+onResize(); // set initial renderer size
+const loader = PIXI.Loader.shared;
 preload(loader);
 appState.navigator = new Navigator(app);

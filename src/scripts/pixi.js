@@ -14,6 +14,7 @@ export * from '@pixi/app';
 export * from '@pixi/sprite-animated';
 export * from '@pixi/sprite-tiling';
 export * from '@pixi/spritesheet';
+export * from '@pixi/text';
 export * from '@pixi/interaction';
 
 // Renderer plugins

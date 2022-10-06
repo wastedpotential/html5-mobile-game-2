@@ -13,7 +13,6 @@ export class Game {
 	parentView = null;
 
 	constructor(view) {
-		console.log('game!');
 		this.parentView = view;
 		this.parentView.addChild(this.centerPoint);
 		this.start();
@@ -62,6 +61,7 @@ export class Game {
 		this.showTimer = setTimeout(() => {
 			this.showMoles();
 		}, 2000);
+		window.addEventListener('resize', this.onResize);
 		this.onResize();
 	}
 

@@ -36,23 +36,24 @@
     "@pixi/sprite-animated": "^6.4.2",
     "@pixi/sprite-tiling": "^6.4.2",
     "@pixi/spritesheet": "^6.4.2",
+    "@pixi/text": "^6.5.5",
     "@pixi/ticker": "^6.4.2",
     "@pixi/utils": "^6.4.2",
     "gsap": "^3.10.4"
   },
   "devDependencies": {
-    "cordova-android": "^10.1.2",
-    "cordova-ios": "^6.2.0",
     "@babel/core": "^7.18.0",
     "@babel/preset-env": "^7.18.0",
     "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^11.0.0",
+    "cordova-android": "^10.1.2",
+    "cordova-ios": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "string-replace-loader": "^3.1.0",
     "terser-webpack-plugin": "^5.3.1",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0",
-    "string-replace-loader": "^3.1.0"
+    "webpack-dev-server": "^4.9.0"
   },
   "cordova": {
     "platforms": [
