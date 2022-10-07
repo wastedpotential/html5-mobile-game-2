@@ -44,12 +44,12 @@ export class HomeScreen extends BasicScreen {
 	}
 
 	#onHomePressUp() {
-		let gameScreen = new GameScreen();
+		const gameScreen = new GameScreen();
 		appState.navigator.navigateTo(gameScreen);
 	}
 
 	#onScoresPressUp() {
-		let scoresScreen = new ScoresScreen();
+		const scoresScreen = new ScoresScreen();
 		appState.navigator.navigateTo(scoresScreen);
 	}
 }
