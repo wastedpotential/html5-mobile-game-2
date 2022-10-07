@@ -1,5 +1,5 @@
-import * as PIXI from './pixi.js';
-import * as data from './data.js';
+import * as PIXI from '../../scripts/pixi.js';
+import * as data from '../../scripts/data.js';
 
 export class Mole extends PIXI.Container {
 	// ============== PUBLIC METHODS ==============

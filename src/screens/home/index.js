@@ -1,9 +1,9 @@
-import * as PIXI from '../scripts/pixi.js';
-import { BasicScreen } from './basic-screen.js';
-import { appState } from '../scripts/state';
-import { GameScreen } from './game-screen';
-import { ScoresScreen } from './scores-screen';
-import * as data from '../scripts/data.js';
+import * as PIXI from '../../scripts/pixi.js';
+import { BasicScreen } from '../basic-screen.js';
+import { appState } from '../../scripts/state';
+import { GameScreen } from '../game';
+import { ScoresScreen } from '../scores';
+import * as data from '../../scripts/data.js';
 
 export class HomeScreen extends BasicScreen {
 	// ============== PUBLIC METHODS ==============
@@ -11,8 +11,8 @@ export class HomeScreen extends BasicScreen {
 	constructor() {
 		super();
 		console.log('home screen!');
-		let textureSheet = appState.spriteSheet;
-		let homeButton = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']);
+		const textureSheet = appState.spriteSheet;
+		const homeButton = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']);
 		homeButton.animationSpeed = data.animationSpeed;
 		homeButton.anchor.set(0.5, 0.5);
 		homeButton.position.set(-150, 0);
@@ -22,12 +22,12 @@ export class HomeScreen extends BasicScreen {
 		homeButton.play();
 		homeButton.on('mouseup', this.#onHomePressUp).on('mouseupoutside', this.#onHomePressUp).on('touchend', this.#onHomePressUp).on('touchendoutside', this.#onHomePressUp);
 		this.view.addChild(homeButton);
-		let homeText = new PIXI.Text('PLAY', { fontFamily: 'Arial', fontSize: 24, fill: 0xff1010, align: 'center' });
+		const homeText = new PIXI.Text('PLAY', { fontFamily: 'Arial', fontSize: 24, fill: 0xff1010, align: 'center' });
 		homeText.anchor.set(0.5, 0.5);
 		homeText.position.set(-150, 0);
 		this.view.addChild(homeText);
 
-		let scoresButton = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']);
+		const scoresButton = new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']);
 		scoresButton.animationSpeed = data.animationSpeed;
 		scoresButton.anchor.set(0.5, 0.5);
 		scoresButton.position.set(150, 0);
@@ -37,7 +37,7 @@ export class HomeScreen extends BasicScreen {
 		scoresButton.play();
 		scoresButton.on('mouseup', this.#onScoresPressUp).on('mouseupoutside', this.#onScoresPressUp).on('touchend', this.#onScoresPressUp).on('touchendoutside', this.#onScoresPressUp);
 		this.view.addChild(scoresButton);
-		let scoresText = new PIXI.Text('SCORES', { fontFamily: 'Arial', fontSize: 24, fill: 0xff1010, align: 'center' });
+		const scoresText = new PIXI.Text('SCORES', { fontFamily: 'Arial', fontSize: 24, fill: 0xff1010, align: 'center' });
 		scoresText.anchor.set(0.5, 0.5);
 		scoresText.position.set(150, 0);
 		this.view.addChild(scoresText);

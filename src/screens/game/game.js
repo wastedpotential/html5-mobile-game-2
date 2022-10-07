@@ -1,7 +1,7 @@
 import { Mole } from './mole.js';
-import * as PIXI from './pixi.js';
-import * as data from './data.js';
-import { appState } from './state';
+import * as PIXI from '../../scripts/pixi.js';
+import * as data from '../../scripts/data.js';
+import { appState } from '../../scripts/state';
 
 export class Game {
 	sheet = null;

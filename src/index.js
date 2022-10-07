@@ -1,5 +1,5 @@
 import * as PIXI from './scripts/pixi.js';
-import { HomeScreen } from './screens/home-screen';
+import { HomeScreen } from './screens/home';
 import { Navigator } from './navigation';
 import { appState } from './scripts/state';
 import * as data from './scripts/data.js';
@@ -8,7 +8,7 @@ import * as data from './scripts/data.js';
 
 function initApp() {
 	window.addEventListener('resize', onResize);
-	let app = new PIXI.Application({ resolution: 1, roundPixels: true, backgroundColor: 0xffffff });
+	const app = new PIXI.Application({ resolution: 1, roundPixels: true, backgroundColor: 0xffffff });
 	// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
 	const cont = document.querySelector('.game-container');
 	cont.appendChild(app.view);
