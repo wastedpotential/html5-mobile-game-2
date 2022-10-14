@@ -2,11 +2,14 @@ import * as PIXI from '../../scripts/pixi.js';
 import * as data from '../../scripts/data.js';
 
 export class Mole extends PIXI.Container {
-	// ============== PUBLIC METHODS ==============
+	#animations = null;
+	#currentAnim = null;
 
+	// ============== PUBLIC METHODS ==============
 	constructor(textureSheet) {
 		super();
-		this.animations = {
+
+		this.#animations = {
 			none: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['none']),
 			show: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['show']),
 			still: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['still']),
@@ -16,15 +19,13 @@ export class Mole extends PIXI.Container {
 			hide: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['hide']),
 		};
 
-		this.currentAnim = null;
-
 		// set properties on all animations:
-		for (var key in this.animations) {
-			if (!this.animations.hasOwnProperty(key)) continue; // skip prototype properties
-			this.animations[key].animationSpeed = data.animationSpeed;
-			this.animations[key].anchor.set(0.5, 0.5);
+		for (var key in this.#animations) {
+			if (!this.#animations.hasOwnProperty(key)) continue; // skip prototype properties
+			this.#animations[key].animationSpeed = data.animationSpeed;
+			this.#animations[key].anchor.set(0.5, 0.5);
 		}
-		this.#startAnimation(this.animations.none);
+		this.#startAnimation(this.#animations.none);
 
 		// const texButton = textureSheet.textures['menubar_site_btn.png'];
 		// this.siteButton = new PIXI.Sprite(texButton);
@@ -40,11 +41,11 @@ export class Mole extends PIXI.Container {
 	}
 
 	show() {
-		this.#startAnimation(this.animations.show);
+		this.#startAnimation(this.#animations.show);
 	}
 
 	hide() {
-		this.#startAnimation(this.animations.hide);
+		this.#startAnimation(this.#animations.hide);
 	}
 
 	// ============== PRIVATE METHODS ==============
@@ -61,72 +62,72 @@ export class Mole extends PIXI.Container {
 	}
 
 	#startAnimation(nextAnim) {
-		if (this.currentAnim == nextAnim) return;
+		if (this.#currentAnim == nextAnim) return;
 
 		clearTimeout(this.blinkTimeout);
 
-		this.removeChild(this.currentAnim);
+		this.removeChild(this.#currentAnim);
 
 		this.addChild(nextAnim);
 		switch (nextAnim) {
-			case this.animations.none:
+			case this.#animations.none:
 				nextAnim.play();
 				break;
-			case this.animations.show:
+			case this.#animations.show:
 				nextAnim.onComplete = () => {
-					if (this.currentAnim == this.animations.show) {
-						this.#startAnimation(this.animations.still);
+					if (this.#currentAnim == this.#animations.show) {
+						this.#startAnimation(this.#animations.still);
 					}
 				};
 				nextAnim.loop = false;
 				nextAnim.gotoAndPlay(0);
 				break;
-			case this.animations.still:
+			case this.#animations.still:
 				const startFrame = Math.ceil(8 * Math.random());
 				nextAnim.gotoAndPlay(startFrame);
 				const blinkTime = 400 + Math.floor(1000 * Math.random());
 				this.blinkTimeout = setTimeout(() => {
-					this.#startAnimation(this.animations.blink);
+					this.#startAnimation(this.#animations.blink);
 				}, blinkTime);
 				break;
-			case this.animations.blink:
+			case this.#animations.blink:
 				nextAnim.onComplete = () => {
-					if (this.currentAnim == this.animations.blink) {
-						this.#startAnimation(this.animations.still);
+					if (this.#currentAnim == this.#animations.blink) {
+						this.#startAnimation(this.#animations.still);
 					}
 				};
 				nextAnim.loop = false;
 				nextAnim.gotoAndPlay(0);
 				break;
-			case this.animations.press:
+			case this.#animations.press:
 				nextAnim.play();
 				break;
-			case this.animations.dead:
+			case this.#animations.dead:
 				const sFrame = Math.ceil(8 * Math.random());
 				nextAnim.gotoAndPlay(sFrame);
 				break;
-			case this.animations.hide:
+			case this.#animations.hide:
 				nextAnim.onComplete = () => {
-					if (this.currentAnim == this.animations.hide) {
-						this.#startAnimation(this.animations.none);
+					if (this.#currentAnim == this.#animations.hide) {
+						this.#startAnimation(this.#animations.none);
 					}
 				};
 				nextAnim.loop = false;
 				nextAnim.gotoAndPlay(0);
 				break;
 		}
-		this.currentAnim = nextAnim;
+		this.#currentAnim = nextAnim;
 	}
 
 	#onPressDown() {
-		if (this.currentAnim == this.animations.still || this.currentAnim == this.animations.blink) {
-			this.#startAnimation(this.animations.press);
+		if (this.#currentAnim == this.#animations.still || this.#currentAnim == this.#animations.blink) {
+			this.#startAnimation(this.#animations.press);
 		}
 	}
 
 	#onPressUp() {
-		if (this.currentAnim == this.animations.press) {
-			this.#startAnimation(this.animations.dead);
+		if (this.#currentAnim == this.#animations.press) {
+			this.#startAnimation(this.#animations.dead);
 		}
 	}
 }
