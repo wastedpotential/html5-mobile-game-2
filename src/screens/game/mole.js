@@ -45,7 +45,9 @@ export class Mole extends PIXI.Container {
 	}
 
 	hide() {
-		this.#startAnimation(this.#animations.hide);
+		if (this.#currentAnim !== this.#animations.none) {
+			this.#startAnimation(this.#animations.hide);
+		}
 	}
 
 	// ============== PRIVATE METHODS ==============

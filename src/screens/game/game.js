@@ -32,9 +32,17 @@ export class Game {
 	}
 
 	#showMoles() {
+		const odds = Math.floor(100 * Math.random());
+		let chosenMoles = this.#addRandomMole([]); // add a single mole
+		if (odds > 60) {
+			chosenMoles = this.#addRandomMole(chosenMoles); // add a second mole
+		}
+		if (odds > 80) {
+			chosenMoles = this.#addRandomMole(chosenMoles); // add a third mole
+		}
 		clearTimeout(this.#showTimer);
-		for (let i = 0; i < this.#moles.length; i++) {
-			this.#moles[i].show();
+		for (let i = 0; i < chosenMoles.length; i++) {
+			chosenMoles[i].show();
 		}
 		this.#hideTimer = setTimeout(() => {
 			this.#hideMoles();
@@ -49,6 +57,20 @@ export class Game {
 		this.#showTimer = setTimeout(() => {
 			this.#showMoles();
 		}, 2000);
+	}
+
+	#addRandomMole(alreadyChosenMoles) {
+		let chosen = false;
+		let chosenMoles = [...alreadyChosenMoles];
+		while (!chosen) {
+			const randomIndex = Math.floor(this.#moles.length * Math.random());
+			console.log(randomIndex);
+			if (!chosenMoles.includes(this.#moles[randomIndex])) {
+				chosenMoles.push(this.#moles[randomIndex]);
+				chosen = true;
+			}
+		}
+		return chosenMoles;
 	}
 
 	#start() {
