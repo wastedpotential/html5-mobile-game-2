@@ -15,10 +15,9 @@ export class Navigator {
 	}
 
 	navigateTo(screen) {
-		// console.log('~~', Object.getPrototypeOf(Object.getPrototypeOf(screen)).constructor.name);
-		// if (Object.getPrototypeOf(Object.getPrototypeOf(screen)).constructor.name !== 'BasicScreen') {
-		// 	throw 'navigateTo() parameter must be a subclass of BasicScreen';
-		// }
+		if (Object.getPrototypeOf(Object.getPrototypeOf(screen)).constructor.name !== 'BasicScreen') {
+			throw 'navigateTo() parameter must be a subclass of BasicScreen';
+		}
 
 		if (screen == this.#currentScreen) return;
 		if (this.#isNavigating) return;

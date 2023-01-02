@@ -19,3 +19,11 @@ AS of 10-6-2022, I've packaged a basic PIXI JS html5 canvas app with cordova. Al
 ### To run the app on iOS:
 
 -   TBD
+
+## PROBLEMS?
+
+-   **App runs fine with `npm run build` but fails when I run it in production mode on the emulator?** This is probably an issue with the way the code is being transpiled by webpack/babel. To replicate the issue:
+    -   Open package.json
+    -   modify the "production" script to do `webpack serve`
+    -   do `npm run production` - this will run the production build in a browser - use devtools to debug
+    -   don't forget to remove `webpack serve` when you're done
