@@ -13,7 +13,7 @@ AS of 10-6-2022, I've packaged a basic PIXI JS html5 canvas app with cordova. Al
 
 ### To run the app on Android:
 
--   start an android emulator
+-   ~~start an android emulator~~ (no longer necessary)
 -   `cordova emulate android`
 
 ### To run the app on iOS:
