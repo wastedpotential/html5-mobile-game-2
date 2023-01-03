@@ -4,14 +4,31 @@ import * as data from '../../scripts/data.js';
 import { appState } from '../../scripts/state';
 
 export class Game {
+	molePressed = null;
 	#centerPoint = new PIXI.Container();
 	#showTimer = null;
 	#hideTimer = null;
 	#moles = [];
 
 	constructor(view) {
-		view.addChild(this.#centerPoint);
+		view.addChild(this.#centerPoint, this.onMolePressDown, this.onMolePressUp);
 		this.#start();
+	}
+
+	onMolePressDown(mole) {
+		if (molePressed) {
+			console.log('ignoring extra press down');
+			return;
+		}
+		molePressed = mole;
+		mole.hurtMole();
+	}
+
+	onMolePressUp(mole) {
+		if (mole === molePressed) {
+			molePressed = null;
+		}
+		mole.killMole();
 	}
 
 	#createMoles() {

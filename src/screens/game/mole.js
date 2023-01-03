@@ -2,12 +2,18 @@ import * as PIXI from '../../scripts/pixi.js';
 import * as data from '../../scripts/data.js';
 
 export class Mole extends PIXI.Container {
+	isPressed = false;
+	onMolePressDown = null;
+	onMolePressUp = null;
 	#animations = null;
 	#currentAnim = null;
 
 	// ============== PUBLIC METHODS ==============
-	constructor(textureSheet) {
+	constructor(textureSheet, onMolePressDown, onMolePressUp) {
 		super();
+
+		this.onMolePressDown = onMolePressDown;
+		this.onMolePressUp = onMolePressUp;
 
 		this.#animations = {
 			none: new PIXI.AnimatedSprite(textureSheet.spritesheet.animations['none']),
@@ -49,6 +55,10 @@ export class Mole extends PIXI.Container {
 			this.#startAnimation(this.#animations.hide);
 		}
 	}
+
+	press() {}
+
+	release() {}
 
 	// ============== PRIVATE METHODS ==============
 
@@ -123,13 +133,27 @@ export class Mole extends PIXI.Container {
 
 	#onPressDown() {
 		if (this.#currentAnim == this.#animations.still || this.#currentAnim == this.#animations.blink) {
-			this.#startAnimation(this.#animations.press);
+			this.onMolePressDown(this); // let game controller decide what to do
 		}
 	}
 
 	#onPressUp() {
+		clearTimeout(this.hurtTimeout);
+		this.onMolePressUp(this); //tell the game controller that we've let go of this mole
+	}
+
+	hurtMole() {
+		this.#startAnimation(this.#animations.press);
+		const hurtTime = 100;
+		this.hurtTimeout = setTimeout(() => {
+			this.onPressUp();
+		}, hurtTime);
+	}
+
+	killMole() {
 		if (this.#currentAnim == this.#animations.press) {
 			this.#startAnimation(this.#animations.dead);
+			console.log('add 1 to score'); // increment score
 		}
 	}
 }
