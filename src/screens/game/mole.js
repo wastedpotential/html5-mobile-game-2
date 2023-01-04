@@ -56,9 +56,20 @@ export class Mole extends PIXI.Container {
 		}
 	}
 
-	press() {}
+	hurtMole() {
+		this.#startAnimation(this.#animations.press);
+		const hurtTime = 100;
+		this.hurtTimeout = setTimeout(() => {
+			this.#onPressUp();
+		}, hurtTime);
+	}
 
-	release() {}
+	killMole() {
+		if (this.#currentAnim == this.#animations.press) {
+			this.#startAnimation(this.#animations.dead);
+			console.log('add 1 to score'); // increment score
+		}
+	}
 
 	// ============== PRIVATE METHODS ==============
 
@@ -71,6 +82,17 @@ export class Mole extends PIXI.Container {
 		// if (this.siteButton) {
 		// 	this.siteButton.position.set(half, 0);
 		// }
+	}
+
+	#onPressDown() {
+		if (this.#currentAnim == this.#animations.still || this.#currentAnim == this.#animations.blink) {
+			this.onMolePressDown(this); // let game controller decide what to do
+		}
+	}
+
+	#onPressUp() {
+		clearTimeout(this.hurtTimeout);
+		this.onMolePressUp(this); //tell the game controller that we've let go of this mole
 	}
 
 	#startAnimation(nextAnim) {
@@ -129,31 +151,5 @@ export class Mole extends PIXI.Container {
 				break;
 		}
 		this.#currentAnim = nextAnim;
-	}
-
-	#onPressDown() {
-		if (this.#currentAnim == this.#animations.still || this.#currentAnim == this.#animations.blink) {
-			this.onMolePressDown(this); // let game controller decide what to do
-		}
-	}
-
-	#onPressUp() {
-		clearTimeout(this.hurtTimeout);
-		this.onMolePressUp(this); //tell the game controller that we've let go of this mole
-	}
-
-	hurtMole() {
-		this.#startAnimation(this.#animations.press);
-		const hurtTime = 100;
-		this.hurtTimeout = setTimeout(() => {
-			this.onPressUp();
-		}, hurtTime);
-	}
-
-	killMole() {
-		if (this.#currentAnim == this.#animations.press) {
-			this.#startAnimation(this.#animations.dead);
-			console.log('add 1 to score'); // increment score
-		}
 	}
 }

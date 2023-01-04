@@ -11,24 +11,8 @@ export class Game {
 	#moles = [];
 
 	constructor(view) {
-		view.addChild(this.#centerPoint, this.onMolePressDown, this.onMolePressUp);
+		view.addChild(this.#centerPoint);
 		this.#start();
-	}
-
-	onMolePressDown(mole) {
-		if (molePressed) {
-			console.log('ignoring extra press down');
-			return;
-		}
-		molePressed = mole;
-		mole.hurtMole();
-	}
-
-	onMolePressUp(mole) {
-		if (mole === molePressed) {
-			molePressed = null;
-		}
-		mole.killMole();
 	}
 
 	#createMoles() {
@@ -39,7 +23,7 @@ export class Game {
 			const y = data.verticalSpacing * (i + 0.5 * (1 - numRows));
 			for (let j = 0; j < numMolesInRow; j++) {
 				const x = data.horizontalSpacing * (j + 0.5 * (1 - numMolesInRow));
-				const mole = new Mole(appState.spriteSheet);
+				const mole = new Mole(appState.spriteSheet, this.#onMolePressDown, this.#onMolePressUp);
 				mole.position.set(x, y);
 
 				this.#centerPoint.addChild(mole);
@@ -50,12 +34,12 @@ export class Game {
 
 	#showMoles() {
 		const odds = Math.floor(100 * Math.random());
-		let chosenMoles = this.#addRandomMole([]); // add a single mole
+		let chosenMoles = this.#selectRandomMole([]); // add a single mole
 		if (odds > 60) {
-			chosenMoles = this.#addRandomMole(chosenMoles); // add a second mole
+			chosenMoles = this.#selectRandomMole(chosenMoles); // add a second mole
 		}
 		if (odds > 80) {
-			chosenMoles = this.#addRandomMole(chosenMoles); // add a third mole
+			chosenMoles = this.#selectRandomMole(chosenMoles); // add a third mole
 		}
 		clearTimeout(this.#showTimer);
 		for (let i = 0; i < chosenMoles.length; i++) {
@@ -76,12 +60,27 @@ export class Game {
 		}, 2000);
 	}
 
-	#addRandomMole(alreadyChosenMoles) {
+	#onMolePressDown(mole) {
+		if (this.molePressed) {
+			return;
+		}
+		this.molePressed = mole;
+		mole.hurtMole();
+	}
+
+	#onMolePressUp(mole) {
+		if (mole === this.molePressed) {
+			this.molePressed = null;
+			mole.killMole();
+		}
+	}
+
+	#selectRandomMole(alreadyChosenMoles) {
 		let chosen = false;
 		let chosenMoles = [...alreadyChosenMoles];
 		while (!chosen) {
 			const randomIndex = Math.floor(this.#moles.length * Math.random());
-			console.log(randomIndex);
+			//console.log(randomIndex);
 			if (!chosenMoles.includes(this.#moles[randomIndex])) {
 				chosenMoles.push(this.#moles[randomIndex]);
 				chosen = true;
